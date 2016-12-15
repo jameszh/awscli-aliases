@@ -107,3 +107,13 @@ connect-ssh =
     fi
     ssh -i "$ssh_key_file" ec2-user@"$public_ip"
   }; f
+
+search-instances =
+  !f() {
+        aws ec2 describe-instances \
+          --query "Reservations[].Instances[].{Name: (Tags[?Key==\`Name\`].Value)[0],
+                                               Id: InstanceId,
+                                               GroupId: SecurityGroups[].GroupId|join(\`,\`,@)}[?contains(Name,\`"${1}"\`)]" \
+          --out text
+  }; f
+
