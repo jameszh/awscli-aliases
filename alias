@@ -114,6 +114,10 @@ search-instances =
           --query "Reservations[].Instances[].{Name: (Tags[?Key==\`Name\`].Value)[0],
                                                Id: InstanceId,
                                                GroupId: SecurityGroups[].GroupId|join(\`,\`,@)}[?contains(Name,\`"${1}"\`)]" \
-          --out text
+          --out table
   }; f
 
+s3-size = 
+  !f() {
+      aws s3api list-objects --bucket ${1}  --query "[sum(Contents[].Size), length(Contents[])]"
+  }; f
