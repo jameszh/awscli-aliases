@@ -111,6 +111,7 @@ connect-ssh =
 search-instances =
   !f() {
         aws ec2 describe-instances \
+          --filters Name=instance-state-name,Values=running,stopped \
           --query "Reservations[].Instances[].{Name: (Tags[?Key==\`Name\`].Value)[0],
                                                Id: InstanceId,
                                                GroupId: SecurityGroups[].GroupId|join(\`,\`,@)}[?contains(Name,\`"${1}"\`)]" \
