@@ -113,6 +113,7 @@ search-instances =
           --filters Name=instance-state-name,Values=running,stopped \
           --query "Reservations[].Instances[].{Name: (Tags[?Key==\`Name\`].Value)[0],
                                                Id: InstanceId,
+                                               PrivateIpAddress: PrivateIpAddress,
                                                GroupId: SecurityGroups[].GroupId|join(\`,\`,@)}[?contains(Name,\`"${1}"\`)]" \
           --out table
   }; f
